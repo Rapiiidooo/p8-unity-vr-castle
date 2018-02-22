@@ -312,9 +312,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshLink.cs" />
+    <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshModifier.cs" />
+    <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshModifierVolume.cs" />
+    <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshSurface.cs" />
     <Compile Include="Assets\Scripts\Chase.cs" />
     <Compile Include="Assets\Scripts\DiamondSquare.cs" />
     <Compile Include="Assets\Scripts\Fly.cs" />
+    <Compile Include="Assets\Scripts\navMeshProc.cs" />
+    <Compile Include="Assets\Scripts\spawn.cs" />
+    <Compile Include="Assets\Scripts\walkTo.cs" />
     <Compile Include="Assets\Scripts\waterScript.cs" />
   </ItemGroup>
   <ItemGroup>

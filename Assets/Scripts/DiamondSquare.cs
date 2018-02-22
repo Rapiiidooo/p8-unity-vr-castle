@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class DiamondSquare : MonoBehaviour {
     Terrain my_terrain;
@@ -12,7 +13,7 @@ public class DiamondSquare : MonoBehaviour {
     private int heighmap_height;
     private float[,] toNorm;
 
-    public GameObject character;
+    public GameObject player;
     public GameObject enemie;
     public GameObject chateau;
 
@@ -224,6 +225,9 @@ public class DiamondSquare : MonoBehaviour {
 
     void init_chatacter ()
     {
+        
+        /*
+         * //debut de map
         Vector3 newPosition = new Vector3(character.transform.position.x + 5,
                                                     character.transform.position.y,
                                                     character.transform.position.z + 5);
@@ -233,10 +237,18 @@ public class DiamondSquare : MonoBehaviour {
         character.transform.position = new Vector3(character.transform.position.x + 5,
                                                             terrainHeight + 5,
                                                             character.transform.position.z + 5);
+        */
+
+        //au dessus des portes du chateau
+        player.transform.position = new Vector3(chateau.transform.position.x,
+                                                            chateau.transform.position.y+20,
+                                                            chateau.transform.position.z+28);
     }
 
     void init_ennemies ()
     {
+        /*
+         * //debut de map
         Vector3 newPosition = new Vector3(enemie.transform.position.x + 20,
                                                     enemie.transform.position.y,
                                                     enemie.transform.position.z + 20);
@@ -245,7 +257,18 @@ public class DiamondSquare : MonoBehaviour {
 
         enemie.transform.position = new Vector3(enemie.transform.position.x + 20,
                                                     terrainHeight,
-                                                    enemie.transform.position.z + 20); ;
+                                                    enemie.transform.position.z + 20);
+        */
+
+        //a l'entree des portes du chateau
+        Vector3 newPosition = new Vector3(chateau.transform.position.x,
+                                                    0,
+                                                    chateau.transform.position.z+50);
+        float terrainHeight = Terrain.activeTerrain.SampleHeight(newPosition);
+
+        enemie.transform.position = new Vector3(chateau.transform.position.x,
+                                                            terrainHeight,
+                                                            chateau.transform.position.z+50);
     }
 
     Vector3 get_emplacement_chateau(float chateau_x, float chateau_y, float chateau_z)
@@ -293,8 +316,6 @@ public class DiamondSquare : MonoBehaviour {
                             breakLoop = true;
                             break;
                         }
-
-
                     }
                     if (breakLoop == true)
                     {
@@ -334,7 +355,7 @@ public class DiamondSquare : MonoBehaviour {
             if (z < child.GetComponent<Collider>().bounds.size.z)
                 z = child.GetComponent<Collider>().bounds.size.z;
         }
-        chateau.transform.position = get_emplacement_chateau(x+20, y+20, z+20); // + 20 pour avoir un petit écart entre l'eau et le chateau
+        chateau.transform.position = get_emplacement_chateau(x+20, y, z+20); // + 20 pour avoir un petit écart entre l'eau et le chateau
     }
 
     // Use this for initialization
@@ -347,9 +368,9 @@ public class DiamondSquare : MonoBehaviour {
         Compheights(heighmap_width, heighmap_height);
         paintTerrain();
 
+        init_chateau();
         init_chatacter();
         init_ennemies();
-        init_chateau();
     }
 
     // Update is called once per frame
