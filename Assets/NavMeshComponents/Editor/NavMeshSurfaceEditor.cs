@@ -57,7 +57,9 @@ namespace UnityEditor.AI
         static Color s_HandleColorDisabled = new Color(127f * 0.75f, 214f * 0.75f, 244f * 0.75f, 100f) / 255;
 
         static int s_HandleControlIDHint = typeof(NavMeshSurfaceEditor).Name.GetHashCode();
+#pragma warning disable CS0618 // Le type ou le membre est obsolète
         BoxBoundsHandle m_BoundsHandle = new BoxBoundsHandle(s_HandleControlIDHint);
+#pragma warning restore CS0618 // Le type ou le membre est obsolète
 
         bool editingCollider
         {
@@ -440,6 +442,7 @@ namespace UnityEditor.AI
             var navSurface = (NavMeshSurface)target;
             var bounds = new Bounds(navSurface.transform.position, navSurface.size);
 
+#pragma warning disable CS0618 // Le type ou le membre est obsolète
             EditMode.DoEditModeInspectorModeButton(
                 EditMode.SceneViewEditMode.Collider,
                 "Edit Volume",
@@ -447,6 +450,7 @@ namespace UnityEditor.AI
                 bounds,
                 this
                 );
+#pragma warning restore CS0618 // Le type ou le membre est obsolète
         }
 
         void OnSceneGUI()

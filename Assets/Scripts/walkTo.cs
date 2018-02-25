@@ -4,24 +4,36 @@ using System.Collections;
 public class walkTo : MonoBehaviour 
 {
     private bool neverloop = true;
-    public GameObject player;
-    public Transform goal;
-   
+
+    static Animator anim;
+    private UnityEngine.AI.NavMeshAgent agent;
+
    void Start () 
    {
-
-   }
+        anim = GetComponent<Animator>();
+        anim.SetBool("isWalking", true);
+        anim.SetBool("isAttacking", false);
+        anim.SetBool("isIdle", false);
+    }
 
    void Update()
    {
-        if (player.transform.position != new Vector3(0, 0, 0) && neverloop)
+        if (transform.parent.position != new Vector3(0, 0, 0) && neverloop)
         {
-            UnityEngine.AI.NavMeshAgent agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-
-            Vector3 test = goal.position;
-            test.y += 5;
-            agent.destination = goal.position;
+            agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+            Vector3 hauteur = transform.parent.position;
+            hauteur.y += 5;
+            agent.destination = transform.parent.position;
             neverloop = false;
         }
+        //spécifique au skelette vérifie qu'il bouge, s'il bouge, l'animer
+        /*
+        if (this.transform.position == agent.destination)
+        {
+            anim.SetBool("isWalking", false);
+            anim.SetBool("isAttacking", false);
+            anim.SetBool("isIdle", true);
+        }
+        */
    }
 }

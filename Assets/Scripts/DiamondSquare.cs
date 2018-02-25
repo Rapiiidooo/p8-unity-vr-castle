@@ -225,7 +225,6 @@ public class DiamondSquare : MonoBehaviour {
 
     void init_chatacter ()
     {
-        
         /*
          * //debut de map
         Vector3 newPosition = new Vector3(character.transform.position.x + 5,
@@ -271,63 +270,65 @@ public class DiamondSquare : MonoBehaviour {
                                                             chateau.transform.position.z+50);
     }
 
-    Vector3 get_emplacement_chateau(float chateau_x, float chateau_y, float chateau_z)
+    Vector3 get_emplacement_chateau(float chateau_x, float chateau_y, float chateau_z, int ecart)
     {
-        bool breakLoop = false;
+        bool trouver;
 
         TerrainData terrainData = my_terrain.terrainData;
-        float[,] heights = terrainData.GetHeights(0, 0, terrainData.heightmapWidth, terrainData.heightmapHeight);
+        //float[,] heights = terrainData.GetHeights(0, 0, terrainData.heightmapWidth, terrainData.heightmapHeight);
 
         //Debug.Log(terrainData.GetHeight(0, 0));
-        Debug.Log(terrainData.size.x);
-        Debug.Log(terrainData.size.z);
+        //Debug.Log("terrainData.size.x : " + terrainData.size.x);
+        //Debug.Log("terrainData.size.z : " + terrainData.size.z);
 
-        Debug.Log(chateau_x);
-        Debug.Log(chateau_z);
-        Debug.Log(chateau_y);
-        float hauteur_min, pente_max, pente_init, pente_actuel;
+        //Debug.Log("chateau_x : " + chateau_x);
+        //Debug.Log("chateau_z : " + chateau_z);
+        //Debug.Log("chateau_y : " + chateau_y);
+        float hauteur_min;//, pente_max, pente_init, pente_actuel;
 
         hauteur_min = terrainData.size.y * (0.4f * 100) / 100 ;
-        pente_max = terrainData.size.y * (0.1f * 100) / 100;
+        //pente_max = terrainData.size.y * (0.1f * 100) / 100;
 
-        for (int i = (int)chateau_x/2; i < terrainData.size.x; i++)
+        for (int j = (int)chateau_x/2 + ecart; j < terrainData.size.x - ecart - (int)chateau_x / 2; j++)
         {
-            for(int j = (int)chateau_z/2; j < terrainData.size.z; j++)
+            for(int i = (int)chateau_z/2 + ecart; i < terrainData.size.z - ecart - (int)chateau_z / 2; i++)
             {
-                pente_init = terrainData.GetHeight(i, j);
+                trouver = true;
+                //pente_init = terrainData.GetHeight(i, j);
                 //voir si l'emplacement choisi est sur l'eau, ou n'est pas assez plat
-                for (int x = i; x < chateau_x; x++)
+                for (int x = j; x < chateau_x; x++)
                 {
-                    for(int z = j; z < chateau_z; z++)
+                    for(int z = i; z < chateau_z; z++)
                     {
                         // valeur heightmap
                         //hauteur_min > heights[i, j]
-                        if (hauteur_min >= terrainData.GetHeight(i, j))
+                        if (hauteur_min >= terrainData.GetHeight(j, i))
                         //hauteur = terrainData.GetHeight(i, j); // valeur unity
                         {
-                            j += z; // on avance pour ne pas perdre de temps
-                            breakLoop = true;
+                            i += z; // on avance pour ne pas perdre de temps
+                            trouver = false;
                             break;
                         }
-                        pente_actuel = terrainData.GetHeight(i, j); if (pente_actuel < 0) pente_actuel = -1 * pente_actuel;
-                        if (pente_init - terrainData.GetHeight(i, j) >= pente_max)
-                        {
-                            j += z; // on avance pour ne pas perdre de temps
-                            breakLoop = true;
-                            break;
-                        }
+                        //pente_actuel = terrainData.GetHeight(i, j);
+                        //if (pente_actuel < 0) pente_actuel = -1 * pente_actuel;
+
+                        //if (pente_init - terrainData.GetHeight(i, j) >= pente_max)
+                        //{
+                        //    i += x; // on avance pour ne pas perdre de temps
+                        //    breakLoop = true;
+                        //    break;
+                        //}
                     }
-                    if (breakLoop == true)
-                    {
-                        breakLoop = false;
+                    if (trouver == false)
                         break;
-                    }
-                    else
-                        breakLoop = true;
                 }
 
-                if (breakLoop == true)
-                    return new Vector3(i, terrainData.GetHeight(i, j)-2, j);
+                if (trouver == true)
+                {
+                    Debug.Log("x = " + (i + (int)chateau_x / 2));
+                    Debug.Log("z = " + (j + (int)chateau_z / 2));
+                    return new Vector3(i + (int)chateau_x / 2, terrainData.GetHeight(j, i) - 2, j + (int)chateau_z / 2);
+                }
             }
         }
         Debug.Log("Aucune location trouvée pour le chateau...");
@@ -342,20 +343,23 @@ public class DiamondSquare : MonoBehaviour {
 
         foreach (Transform child in chateau.GetComponentInChildren<Transform>())
         {
-            //Debug.Log(child.GetComponent<Collider>().bounds.size.x);
-            //Debug.Log(child.GetComponent<Collider>().bounds.size.y);
-            //Debug.Log(child.GetComponent<Collider>().bounds.size.z);
+            if(child && child.GetComponent<Collider>())
+            {
+                //Debug.Log(child.GetComponent<Collider>().bounds.size.x);
+                //Debug.Log(child.GetComponent<Collider>().bounds.size.y);
+                //Debug.Log(child.GetComponent<Collider>().bounds.size.z);
 
-            if (x < child.GetComponent<Collider>().bounds.size.x)
-                x = child.GetComponent<Collider>().bounds.size.x;
+                if (x < child.GetComponent<Collider>().bounds.size.x)
+                    x = child.GetComponent<Collider>().bounds.size.x;
 
-            if (y < child.GetComponent<Collider>().bounds.size.y)
-                y = child.GetComponent<Collider>().bounds.size.y;
+                if (y < child.GetComponent<Collider>().bounds.size.y)
+                    y = child.GetComponent<Collider>().bounds.size.y;
 
-            if (z < child.GetComponent<Collider>().bounds.size.z)
-                z = child.GetComponent<Collider>().bounds.size.z;
+                if (z < child.GetComponent<Collider>().bounds.size.z)
+                    z = child.GetComponent<Collider>().bounds.size.z;
+            }
         }
-        chateau.transform.position = get_emplacement_chateau(x+20, y, z+20); // + 20 pour avoir un petit écart entre l'eau et le chateau
+        chateau.transform.position = get_emplacement_chateau(x, y, z, 20); // 4 eme argument pour avoir un petit écart entre l'eau et le chateau
     }
 
     // Use this for initialization
@@ -370,7 +374,7 @@ public class DiamondSquare : MonoBehaviour {
 
         init_chateau();
         init_chatacter();
-        init_ennemies();
+        //init_ennemies();
     }
 
     // Update is called once per frame

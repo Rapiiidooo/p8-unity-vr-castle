@@ -55,10 +55,11 @@ public class Chase : MonoBehaviour {
         else
         {
             focused = false;
-
+            /*
             anim.SetBool("isIdle", true);
             anim.SetBool("isWalking", false);
             anim.SetBool("isAttacking", false);
+            */
         }
 	}
 }

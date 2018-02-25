@@ -4,4 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scene/Menu.unity
+    guid: b89e570428e974c42bbe7f3a87498771
+  - enabled: 1
+    path: Assets/Scene/CastleDefense.unity
+    guid: 8ae9b1043d12a1d43847c905b2f820ad

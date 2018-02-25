@@ -8,7 +8,7 @@ public class navMeshProc : MonoBehaviour {
     private bool neverloop = true;
 
     public NavMeshSurface surface;
-    public GameObject pos;
+    public GameObject player;
     
     // Use this for initialization
     void Start () {
@@ -18,9 +18,9 @@ public class navMeshProc : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 		
-        if(pos.transform.position != new Vector3(0,0,0) && neverloop)
+        if(player.transform.position != new Vector3(0,0,0) && neverloop)
         {
-            //surface.BuildNavMesh();
+            surface.BuildNavMesh();
             neverloop = false;
         }
     }
