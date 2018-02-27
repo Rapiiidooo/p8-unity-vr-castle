@@ -20,7 +20,7 @@ public class navMeshProc : MonoBehaviour {
 		
         if(player.transform.position != new Vector3(0,0,0) && neverloop)
         {
-            surface.BuildNavMesh();
+            //surface.BuildNavMesh();
             neverloop = false;
         }
     }

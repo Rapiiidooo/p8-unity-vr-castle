@@ -289,16 +289,16 @@ public class DiamondSquare : MonoBehaviour {
         hauteur_min = terrainData.size.y * (0.4f * 100) / 100 ;
         //pente_max = terrainData.size.y * (0.1f * 100) / 100;
 
-        for (int j = (int)chateau_x/2 + ecart; j < terrainData.size.x - ecart - (int)chateau_x / 2; j++)
+        for (int j = (int)chateau_x/2 + ecart; j < terrainData.size.x - ecart - ((int)chateau_x / 2); j++)
         {
-            for(int i = (int)chateau_z/2 + ecart; i < terrainData.size.z - ecart - (int)chateau_z / 2; i++)
+            for(int i = (int)chateau_z/2 + ecart; i < terrainData.size.z - ecart - ((int)chateau_z / 2); i++)
             {
                 trouver = true;
                 //pente_init = terrainData.GetHeight(i, j);
                 //voir si l'emplacement choisi est sur l'eau, ou n'est pas assez plat
-                for (int x = j; x < chateau_x; x++)
+                for (int x = j; x < j + chateau_x; x++)
                 {
-                    for(int z = i; z < chateau_z; z++)
+                    for(int z = i; z < i + chateau_z; z++)
                     {
                         // valeur heightmap
                         //hauteur_min > heights[i, j]
@@ -327,7 +327,7 @@ public class DiamondSquare : MonoBehaviour {
                 {
                     Debug.Log("x = " + (i + (int)chateau_x / 2));
                     Debug.Log("z = " + (j + (int)chateau_z / 2));
-                    return new Vector3(i + (int)chateau_x / 2, terrainData.GetHeight(j, i) - 2, j + (int)chateau_z / 2);
+                    return new Vector3(i + (int)chateau_x / 2 + ecart, terrainData.GetHeight(j, i) - 2, j + (int)chateau_z / 2 + ecart);
                 }
             }
         }

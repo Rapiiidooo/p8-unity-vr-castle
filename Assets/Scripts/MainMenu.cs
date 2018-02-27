@@ -24,7 +24,6 @@ public class MainMenu : MonoBehaviour {
 
         while (!operation.isDone)
         {
-            
             float progress = Mathf.Clamp01(operation.progress / 0.9f); // car operation.isDone == true quand operation.progress = 0.9
             slider.value = progress;
             
