@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+using Assets.Scripts;
+using log4net;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class DiamondSquare : MonoBehaviour {
     Terrain my_terrain;
@@ -16,6 +14,12 @@ public class DiamondSquare : MonoBehaviour {
     public GameObject player;
     public GameObject enemie;
     public GameObject chateau;
+
+    //A faire une fois seulement, sert pour configurer le logger
+    Log log;
+    
+    //A écrire dans chaque classe ou l'on veut Logger un event
+    private static readonly ILog Logger = LogManager.GetLogger("DiamondSquare");
 
     // Terrain painting ------------------
     [System.Serializable]
@@ -38,8 +42,6 @@ public class DiamondSquare : MonoBehaviour {
         }
         return res;
     }
-
-
 
     void my_normalize(int widthsize, int heighsize)
     {
@@ -325,13 +327,13 @@ public class DiamondSquare : MonoBehaviour {
 
                 if (trouver == true)
                 {
-                    Debug.Log("x = " + (i + (int)chateau_x / 2));
-                    Debug.Log("z = " + (j + (int)chateau_z / 2));
+                    Logger.Debug("x = " + (i + (int)chateau_x / 2));
+                    Logger.Debug("z = " + (j + (int)chateau_z / 2));
                     return new Vector3(i + (int)chateau_x / 2 + ecart, terrainData.GetHeight(j, i) - 2, j + (int)chateau_z / 2 + ecart);
                 }
             }
         }
-        Debug.Log("Aucune location trouvée pour le chateau...");
+        Logger.Debug("Aucune location trouvée pour le chateau...");
 
         return new Vector3(0, 0, 0);
     }
@@ -361,20 +363,30 @@ public class DiamondSquare : MonoBehaviour {
         }
         chateau.transform.position = get_emplacement_chateau(x, y, z, 20); // 4 eme argument pour avoir un petit écart entre l'eau et le chateau
     }
-
+    
     // Use this for initialization
     void Start()
     {
-        my_terrain = Terrain.activeTerrain;
-        heighmap_width = my_terrain.terrainData.heightmapWidth;
-        heighmap_height = my_terrain.terrainData.heightmapHeight;
-        my_terrain.heightmapMaximumLOD = Details; // Minimum details: 1 , max details: 0
-        Compheights(heighmap_width, heighmap_height);
-        paintTerrain();
-
-        init_chateau();
-        init_chatacter();
-        //init_ennemies();
+        log = new Log();
+        try {
+            Logger.Info("Début - Génération Terrain.");
+            my_terrain = Terrain.activeTerrain;
+            heighmap_width = my_terrain.terrainData.heightmapWidth;
+            heighmap_height = my_terrain.terrainData.heightmapHeight;
+            my_terrain.heightmapMaximumLOD = Details; // Minimum details: 1 , max details: 0
+            Compheights(heighmap_width, heighmap_height);
+            paintTerrain();
+            Logger.Info("Fin - Génération Terrain");
+            Logger.Info("Début - Placement des objets / environnement / player");
+            init_chateau();
+            init_chatacter();
+            //init_ennemies();
+            Logger.Info("Fin - Placement des objets / environnement / player");
+        }
+        catch(System.Exception e)
+        {
+            Logger.Error(Logger.Logger.Name + " " + e.Message);
+        }
     }
 
     // Update is called once per frame

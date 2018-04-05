@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
-    
+using log4net;
+using System;
+
 public class walkTo : MonoBehaviour 
 {
+    private static readonly ILog Logger = LogManager.GetLogger("walkTo");
+
     private bool neverloop = true;
 
     static Animator anim;
@@ -18,22 +21,29 @@ public class walkTo : MonoBehaviour
 
    void Update()
    {
-        if (transform.parent.position != new Vector3(0, 0, 0) && neverloop)
+        try
         {
-            agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-            Vector3 hauteur = transform.parent.position;
-            hauteur.y += 5;
-            agent.destination = transform.parent.position;
-            neverloop = false;
+            if (transform.parent.position != new Vector3(0, 0, 0) && neverloop)
+            {
+                agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+                Vector3 hauteur = transform.parent.position;
+                hauteur.y += 5;
+                agent.destination = transform.parent.position;
+                neverloop = false;
+            }
+            //spécifique au skelette vérifie qu'il bouge, s'il bouge, l'animer
+            /*
+            if (this.transform.position == agent.destination)
+            {
+                anim.SetBool("isWalking", false);
+                anim.SetBool("isAttacking", false);
+                anim.SetBool("isIdle", true);
+            }
+            */
         }
-        //spécifique au skelette vérifie qu'il bouge, s'il bouge, l'animer
-        /*
-        if (this.transform.position == agent.destination)
+        catch (Exception e)
         {
-            anim.SetBool("isWalking", false);
-            anim.SetBool("isAttacking", false);
-            anim.SetBool("isIdle", true);
+            Logger.Error(Logger.Logger.Name + " " + e.Message);
         }
-        */
    }
 }

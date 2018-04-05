@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using log4net;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,12 +7,15 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour {
 
+    private static readonly ILog Logger = LogManager.GetLogger("MainMenu");
+
     public Slider slider;
     public GameObject progressText;
     private TextMeshProUGUI progressTextMeshPro;
 
     public void PlayGame (int sceneIndex)
     {
+        Logger.Info("Event - Niveau choisi : " + sceneIndex);
         progressTextMeshPro = progressText.GetComponent<TextMeshProUGUI>();
         StartCoroutine(LoadAsynchrone(sceneIndex));
     }
@@ -27,7 +31,7 @@ public class MainMenu : MonoBehaviour {
             float progress = Mathf.Clamp01(operation.progress / 0.9f); // car operation.isDone == true quand operation.progress = 0.9
             slider.value = progress;
             
-            Debug.Log(operation.progress);
+            Logger.Debug(operation.progress);
             progressTextMeshPro.SetText((progress * 100f) + "%");
 
             yield return null;
@@ -37,6 +41,7 @@ public class MainMenu : MonoBehaviour {
 
     public void QuitGame ()
     {
+        Logger.Info("Event - Fermeture de l'application ...");
         Application.Quit();
     }
 
