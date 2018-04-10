@@ -282,7 +282,7 @@ public class DiamondSquare : MonoBehaviour {
             for(int i = (int)chateau_z/2 + ecart; i < terrainData.size.z - ecart - ((int)chateau_z / 2); i++)
             {
                 trouver = true;
-                pente_init = terrainData.GetHeight(j, i);
+                pente_init = my_terrain.SampleHeight(new Vector3(i, 0, j));
                 //voir si l'emplacement choisi est sur l'eau, ou n'est pas assez plat
                 for (int x = j; x < j + chateau_x; x++)
                 {
@@ -290,17 +290,17 @@ public class DiamondSquare : MonoBehaviour {
                     {
                         // valeur heightmap
                         //hauteur_min > heights[i, j]
-                        if (hauteur_min >= terrainData.GetHeight(j, i))
+                        if (hauteur_min >= my_terrain.SampleHeight(new Vector3(i, 0, j)))
                         //hauteur = terrainData.GetHeight(i, j); // valeur unity
                         {
                             i += z; // on avance pour ne pas perdre de temps
                             trouver = false;
                             break;
                         }
-                        pente_actuel = terrainData.GetHeight(j, i);
+                        pente_actuel = my_terrain.SampleHeight(new Vector3(i, 0, j));
                         if (pente_actuel < 0) pente_actuel = -1 * pente_actuel;
 
-                        if (pente_init - terrainData.GetHeight(i, j) >= pente_max)
+                        if (pente_init - my_terrain.SampleHeight(new Vector3(i, 0, j)) >= pente_max)
                         {
                             i += z; // on avance pour ne pas perdre de temps
                             break;
@@ -314,7 +314,7 @@ public class DiamondSquare : MonoBehaviour {
                 {
                     Logger.Debug("x = " + (i + (int)chateau_x / 2));
                     Logger.Debug("z = " + (j + (int)chateau_z / 2));
-                    return new Vector3(i + (int)chateau_x / 2 + ecart, terrainData.GetHeight(j, i) - 2, j + (int)chateau_z / 2 + ecart);
+                    return new Vector3(i + (int)chateau_x / 2 + ecart, my_terrain.SampleHeight(new Vector3(i, 0, j)) - 2, j + (int)chateau_z / 2 + ecart);
                 }
             }
         }
@@ -355,17 +355,23 @@ public class DiamondSquare : MonoBehaviour {
         //Logger.Debug("Height test: " + my_terrain.terrainData.GetHeight(100, 100) + " | " + heights[100, 100] + " | " + (my_terrain.terrainData.size.y * (heights[100, 100] * 100) / 100));
         List<Tuple> listRdmBusy = new List<Tuple>();
         Tuple positions = new Tuple(0,0);
-        int nbTotal = 0;
         int rdmx = 0;
         int rdmz = 0;
         bool busy = true;
-        foreach (var elem in this.listEnvmt)
+        bool keepGoing = true;
+
+        while(keepGoing)
         {
-            nbTotal += elem.nbElement;
-        }
-        int i = 0;
-        while(i < nbTotal)
-        {
+            #region verif si le nombre d'element restant est de 0
+            int totaltmp = 0;
+            foreach (var elem in this.listEnvmt)
+            {
+                totaltmp += elem.nbElement;
+            }
+            if (totaltmp <= 0)
+                keepGoing = false;
+            #endregion
+
             while (busy == true)
             {
                 rdmx = (int)Random.Range(0, my_terrain.terrainData.bounds.size.x);
@@ -385,14 +391,18 @@ public class DiamondSquare : MonoBehaviour {
 
             foreach (var elem in this.listEnvmt)
             {
-                var hauteurmin = my_terrain.terrainData.size.y * (elem.startingHeight * 100) / 100;
-                var hauteurmax = my_terrain.terrainData.size.y * (elem.endingHeight * 100) / 100;
-                var hauteurRdm = my_terrain.terrainData.GetHeight(rdmx, rdmz);
-                if (hauteurRdm >= hauteurmin && hauteurRdm <= hauteurmax)
+                if (elem.nbElement > 0)
                 {
-                    Vector3 spawnPosition = new Vector3(rdmx, hauteurRdm, rdmz);
-                    Instantiate(elem.obj, spawnPosition, this.transform.rotation, this.transform.parent);
-                    i++;
+                    var hauteurmin = my_terrain.terrainData.size.y * (elem.startingHeight * 100) / 100;
+                    var hauteurmax = my_terrain.terrainData.size.y * (elem.endingHeight * 100) / 100;
+                    var hauteurRdm = my_terrain.SampleHeight(new Vector3(rdmx, 0, rdmz));
+                    if (hauteurRdm >= hauteurmin && hauteurRdm <= hauteurmax)
+                    {
+                        Vector3 spawnPosition = new Vector3(rdmx, hauteurRdm, rdmz);
+                        Instantiate(elem.obj, spawnPosition, this.transform.rotation, this.transform.parent);
+                        elem.nbElement--;
+                        break;
+                    }
                 }
             }
             busy = true;

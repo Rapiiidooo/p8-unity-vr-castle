@@ -568,16 +568,60 @@ MonoBehaviour:
   listEnvmt:
   - startingHeight: 0.35
     endingHeight: 0.8
-    nbElement: 5
+    nbElement: 50
     obj: {fileID: 100000, guid: 6aab193b7693b5e4c9741f1917d2987c, type: 3}
   - startingHeight: 0.35
     endingHeight: 0.8
-    nbElement: 5
+    nbElement: 50
     obj: {fileID: 100016, guid: 469edab27ab6d004d84af2c4a851bd7f, type: 3}
   - startingHeight: 0.3
     endingHeight: 0.33
-    nbElement: 5
+    nbElement: 30
     obj: {fileID: 100004, guid: d027af1092f6b434090f040565e7e656, type: 3}
+  - startingHeight: 0.35
+    endingHeight: 0.8
+    nbElement: 50
+    obj: {fileID: 100000, guid: c91c1eb85782d5748ace27eb4d7415bb, type: 3}
+  - startingHeight: 0.55
+    endingHeight: 0.9
+    nbElement: 10
+    obj: {fileID: 100000, guid: 0c5fa332187126b49a1e9939b653c735, type: 2}
+  - startingHeight: 0.55
+    endingHeight: 0.9
+    nbElement: 10
+    obj: {fileID: 100000, guid: 60116770606d26d4aa4ad5b1d47abb87, type: 2}
+  - startingHeight: 0.55
+    endingHeight: 0.9
+    nbElement: 10
+    obj: {fileID: 100000, guid: 16763a3b82d494a4eb4cb2a684f4832e, type: 2}
+  - startingHeight: 0.55
+    endingHeight: 0.9
+    nbElement: 10
+    obj: {fileID: 100000, guid: de998f0827348d640a7822921d39e71a, type: 2}
+  - startingHeight: 0.55
+    endingHeight: 0.9
+    nbElement: 10
+    obj: {fileID: 100000, guid: c54b9fb125ceba84fb507430ced6b3c5, type: 2}
+  - startingHeight: 0.55
+    endingHeight: 0.9
+    nbElement: 10
+    obj: {fileID: 100000, guid: d4ed0acaabbad1c4ab07f2990cb6bd8e, type: 2}
+  - startingHeight: 0.55
+    endingHeight: 0.9
+    nbElement: 10
+    obj: {fileID: 100000, guid: 6424d87afda7c084f8ca90bf51fd6e04, type: 2}
+  - startingHeight: 0.55
+    endingHeight: 0.9
+    nbElement: 10
+    obj: {fileID: 100000, guid: abe0410befd63b540b6d2ba13ec9e8b5, type: 2}
+  - startingHeight: 0.55
+    endingHeight: 0.9
+    nbElement: 10
+    obj: {fileID: 100000, guid: 4fce9e8dffc2c794e97135c049e7f5d5, type: 2}
+  - startingHeight: 0.55
+    endingHeight: 0.9
+    nbElement: 10
+    obj: {fileID: 100000, guid: 01b8abd17cda7694b850cfb1df28dbb5, type: 2}
   splatHeights:
   - textureIndex: 0
     startingHeight: 0

@@ -1,10 +1,7 @@
-2018-04-09 22:41:12,648 INFO  DiamondSquare - Début - Génération Terrain.
-2018-04-09 22:41:12,794 INFO  DiamondSquare - Fin - Génération Terrain
-2018-04-09 22:41:12,795 INFO  DiamondSquare - Début - Placement des objets / environnement / player
-2018-04-09 22:41:12,797 DEBUG DiamondSquare - x = 281
-2018-04-09 22:41:12,797 DEBUG DiamondSquare - z = 101
-2018-04-09 22:41:12,799 DEBUG DiamondSquare - Height test: 82.20412 | 0.3288164 | 82.20411
-2018-04-09 22:41:12,800 DEBUG DiamondSquare - 82.20412
-2018-04-09 22:41:12,804 INFO  DiamondSquare - Fin - Placement des objets / environnement / player
-2018-04-09 22:41:12,804 INFO  spawn - Début - Génération ennemies
-2018-04-09 22:41:14,155 INFO  spawn - Fin - Génération ennemies
+2018-04-11 01:08:04,115 INFO  DiamondSquare - Début - Génération Terrain.
+2018-04-11 01:08:04,273 INFO  DiamondSquare - Fin - Génération Terrain
+2018-04-11 01:08:04,274 INFO  DiamondSquare - Début - Placement des objets / environnement / player
+2018-04-11 01:08:04,277 DEBUG DiamondSquare - x = 101
+2018-04-11 01:08:04,278 DEBUG DiamondSquare - z = 101
+2018-04-11 01:08:04,422 INFO  DiamondSquare - Fin - Placement des objets / environnement / player
+2018-04-11 01:08:04,423 INFO  spawn - Début - Génération ennemies
