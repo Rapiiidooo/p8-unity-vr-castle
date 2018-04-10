@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scene/CastleDefense.unity
+- path: Assets/Scene/Aventure.unity
   isLoaded: 1
   isActive: 1

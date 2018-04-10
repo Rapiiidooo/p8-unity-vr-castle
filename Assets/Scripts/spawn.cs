@@ -28,7 +28,7 @@ public class spawn : MonoBehaviour {
                 stop = true;
             randEnnemy = Random.Range(0, enemies.Length);
 
-            Vector3 spawnPosition = new Vector3(this.transform.position.x + Random.Range(-50, 50), this.transform.position.y, this.transform.position.z + Random.Range(-10, 10));
+            Vector3 spawnPosition = new Vector3(this.transform.position.x + Random.Range(-50, 50), this.transform.position.y + 5, this.transform.position.z + Random.Range(-10, 10));
 
             Instantiate(enemies[randEnnemy], spawnPosition, this.transform.rotation, this.transform.parent);
             numbers--;
@@ -41,7 +41,7 @@ public class spawn : MonoBehaviour {
     }
     */
 
-
+    
     //Avec timer
     
     void Start()
@@ -89,5 +89,4 @@ public class spawn : MonoBehaviour {
         }
         Logger.Info("Fin - Génération ennemies");
     }
-    
 }

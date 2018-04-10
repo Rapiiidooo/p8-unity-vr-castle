@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2017
+# Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RMD-VR", "RMD-VR.csproj", "{1B2B306D-FF66-2BB7-3C51-4949F191121C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RMD-VR.Plugins", "RMD-VR.Plugins.csproj", "{5D903062-9941-7BC9-82B8-EAA6957A6109}"

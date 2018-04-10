@@ -1,6 +1,8 @@
 using Assets.Scripts;
+using Boo.Lang;
 using log4net;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class DiamondSquare : MonoBehaviour {
     Terrain my_terrain;
@@ -12,8 +14,18 @@ public class DiamondSquare : MonoBehaviour {
     private float[,] toNorm;
 
     public GameObject player;
-    public GameObject enemie;
     public GameObject chateau;
+
+    [System.Serializable]
+    public class Envmt
+    {
+        public float startingHeight;
+        public float endingHeight;
+        public int nbElement;
+        public GameObject obj;
+    }
+
+    public Envmt[] listEnvmt;
 
     //A faire une fois seulement, sert pour configurer le logger
     Log log;
@@ -246,32 +258,6 @@ public class DiamondSquare : MonoBehaviour {
                                                             chateau.transform.position.z+28);
     }
 
-    void init_ennemies ()
-    {
-        /*
-         * //debut de map
-        Vector3 newPosition = new Vector3(enemie.transform.position.x + 20,
-                                                    enemie.transform.position.y,
-                                                    enemie.transform.position.z + 20);
-
-        float terrainHeight = Terrain.activeTerrain.SampleHeight(newPosition);
-
-        enemie.transform.position = new Vector3(enemie.transform.position.x + 20,
-                                                    terrainHeight,
-                                                    enemie.transform.position.z + 20);
-        */
-
-        //a l'entree des portes du chateau
-        Vector3 newPosition = new Vector3(chateau.transform.position.x,
-                                                    0,
-                                                    chateau.transform.position.z+50);
-        float terrainHeight = Terrain.activeTerrain.SampleHeight(newPosition);
-
-        enemie.transform.position = new Vector3(chateau.transform.position.x,
-                                                            terrainHeight,
-                                                            chateau.transform.position.z+50);
-    }
-
     Vector3 get_emplacement_chateau(float chateau_x, float chateau_y, float chateau_z, int ecart)
     {
         bool trouver;
@@ -286,17 +272,17 @@ public class DiamondSquare : MonoBehaviour {
         //Debug.Log("chateau_x : " + chateau_x);
         //Debug.Log("chateau_z : " + chateau_z);
         //Debug.Log("chateau_y : " + chateau_y);
-        float hauteur_min;//, pente_max, pente_init, pente_actuel;
+        float hauteur_min, pente_max, pente_init, pente_actuel;
 
-        hauteur_min = terrainData.size.y * (0.4f * 100) / 100 ;
-        //pente_max = terrainData.size.y * (0.1f * 100) / 100;
+        hauteur_min = terrainData.size.y * (0.4f * 100) / 100;
+        pente_max = terrainData.size.y * (0.1f * 100) / 100;
 
         for (int j = (int)chateau_x/2 + ecart; j < terrainData.size.x - ecart - ((int)chateau_x / 2); j++)
         {
             for(int i = (int)chateau_z/2 + ecart; i < terrainData.size.z - ecart - ((int)chateau_z / 2); i++)
             {
                 trouver = true;
-                //pente_init = terrainData.GetHeight(i, j);
+                pente_init = terrainData.GetHeight(j, i);
                 //voir si l'emplacement choisi est sur l'eau, ou n'est pas assez plat
                 for (int x = j; x < j + chateau_x; x++)
                 {
@@ -311,15 +297,14 @@ public class DiamondSquare : MonoBehaviour {
                             trouver = false;
                             break;
                         }
-                        //pente_actuel = terrainData.GetHeight(i, j);
-                        //if (pente_actuel < 0) pente_actuel = -1 * pente_actuel;
+                        pente_actuel = terrainData.GetHeight(j, i);
+                        if (pente_actuel < 0) pente_actuel = -1 * pente_actuel;
 
-                        //if (pente_init - terrainData.GetHeight(i, j) >= pente_max)
-                        //{
-                        //    i += x; // on avance pour ne pas perdre de temps
-                        //    breakLoop = true;
-                        //    break;
-                        //}
+                        if (pente_init - terrainData.GetHeight(i, j) >= pente_max)
+                        {
+                            i += z; // on avance pour ne pas perdre de temps
+                            break;
+                        }
                     }
                     if (trouver == false)
                         break;
@@ -363,11 +348,62 @@ public class DiamondSquare : MonoBehaviour {
         }
         chateau.transform.position = get_emplacement_chateau(x, y, z, 20); // 4 eme argument pour avoir un petit écart entre l'eau et le chateau
     }
-    
+
+    void init_environnement ()
+    {
+        //float[,] heights = my_terrain.terrainData.GetHeights(0, 0, my_terrain.terrainData.heightmapWidth, my_terrain.terrainData.heightmapHeight);
+        //Logger.Debug("Height test: " + my_terrain.terrainData.GetHeight(100, 100) + " | " + heights[100, 100] + " | " + (my_terrain.terrainData.size.y * (heights[100, 100] * 100) / 100));
+        List<Tuple> listRdmBusy = new List<Tuple>();
+        Tuple positions = new Tuple(0,0);
+        int nbTotal = 0;
+        int rdmx = 0;
+        int rdmz = 0;
+        bool busy = true;
+        foreach (var elem in this.listEnvmt)
+        {
+            nbTotal += elem.nbElement;
+        }
+        int i = 0;
+        while(i < nbTotal)
+        {
+            while (busy == true)
+            {
+                rdmx = (int)Random.Range(0, my_terrain.terrainData.bounds.size.x);
+                rdmz = (int)Random.Range(0, my_terrain.terrainData.bounds.size.z);
+                positions = new Tuple(rdmx, rdmz);
+                busy = false;
+                foreach(var elem in listRdmBusy)
+                {
+                    if (elem.rdmx == rdmx && elem.rdmz == rdmz)
+                    {
+                        busy = true;
+                        break;
+                    }
+                }
+            }
+            listRdmBusy.Push(positions);
+
+            foreach (var elem in this.listEnvmt)
+            {
+                var hauteurmin = my_terrain.terrainData.size.y * (elem.startingHeight * 100) / 100;
+                var hauteurmax = my_terrain.terrainData.size.y * (elem.endingHeight * 100) / 100;
+                var hauteurRdm = my_terrain.terrainData.GetHeight(rdmx, rdmz);
+                if (hauteurRdm >= hauteurmin && hauteurRdm <= hauteurmax)
+                {
+                    Vector3 spawnPosition = new Vector3(rdmx, hauteurRdm, rdmz);
+                    Instantiate(elem.obj, spawnPosition, this.transform.rotation, this.transform.parent);
+                    i++;
+                }
+            }
+            busy = true;
+        }
+    }
+
     // Use this for initialization
     void Start()
     {
         log = new Log();
+        if (log == null) Debug.Log("Le logger n'est pas correctement instancié");
         try {
             Logger.Info("Début - Génération Terrain.");
             my_terrain = Terrain.activeTerrain;
@@ -381,7 +417,9 @@ public class DiamondSquare : MonoBehaviour {
             init_chateau();
             init_chatacter();
             //init_ennemies();
+            init_environnement();
             Logger.Info("Fin - Placement des objets / environnement / player");
+
         }
         catch(System.Exception e)
         {

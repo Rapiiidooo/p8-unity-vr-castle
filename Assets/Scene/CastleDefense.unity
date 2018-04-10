@@ -564,8 +564,20 @@ MonoBehaviour:
   minstart: 0.4
   maxstart: 0.6
   player: {fileID: 1741550801}
-  enemie: {fileID: 0}
   chateau: {fileID: 163995882}
+  listEnvmt:
+  - startingHeight: 0.35
+    endingHeight: 0.8
+    nbElement: 5
+    obj: {fileID: 100000, guid: 6aab193b7693b5e4c9741f1917d2987c, type: 3}
+  - startingHeight: 0.35
+    endingHeight: 0.8
+    nbElement: 5
+    obj: {fileID: 100016, guid: 469edab27ab6d004d84af2c4a851bd7f, type: 3}
+  - startingHeight: 0.3
+    endingHeight: 0.33
+    nbElement: 5
+    obj: {fileID: 100004, guid: d027af1092f6b434090f040565e7e656, type: 3}
   splatHeights:
   - textureIndex: 0
     startingHeight: 0
@@ -724,13 +736,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fc5b3850fdb7b24784b4a0b39d16f4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numbers: 60
+  numbers: 30
   enemies:
   - {fileID: 1904261103159998, guid: 7391706219b172443af24ff2ca6f92cd, type: 2}
-  spawnWait: 0
-  spawnMostWait: 0
-  spawnLeastWait: 0
-  startWait: 0
+  spawnWait: 2
+  spawnMostWait: 10
+  spawnLeastWait: 3
+  startWait: 3
   stop: 0
 --- !u!1 &1741550801
 GameObject:
