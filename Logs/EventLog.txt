@@ -1,7 +1,8 @@
-2018-04-11 01:08:04,115 INFO  DiamondSquare - Début - Génération Terrain.
-2018-04-11 01:08:04,273 INFO  DiamondSquare - Fin - Génération Terrain
-2018-04-11 01:08:04,274 INFO  DiamondSquare - Début - Placement des objets / environnement / player
-2018-04-11 01:08:04,277 DEBUG DiamondSquare - x = 101
-2018-04-11 01:08:04,278 DEBUG DiamondSquare - z = 101
-2018-04-11 01:08:04,422 INFO  DiamondSquare - Fin - Placement des objets / environnement / player
-2018-04-11 01:08:04,423 INFO  spawn - Début - Génération ennemies
+2018-04-11 23:50:35,702 INFO  DiamondSquare - Début - Génération Terrain.
+2018-04-11 23:50:35,869 INFO  DiamondSquare - Fin - Génération Terrain
+2018-04-11 23:50:35,869 INFO  DiamondSquare - Début - Placement des objets / environnement / player
+2018-04-11 23:50:35,872 DEBUG DiamondSquare - Emplacement chateau en x = 127
+2018-04-11 23:50:35,872 DEBUG DiamondSquare - Emplacement chateau en z = 118
+2018-04-11 23:50:35,873 DEBUG DiamondSquare - Emplacement chateau en y = 120.8022
+2018-04-11 23:50:36,007 INFO  DiamondSquare - Fin - Placement des objets / environnement / player
+2018-04-11 23:50:36,008 INFO  spawn - Début - Génération ennemies
