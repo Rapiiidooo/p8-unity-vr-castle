@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.AI;
 using log4net;
+using System.Collections;
 
 public class spawn : MonoBehaviour {
 
     private static readonly ILog Logger = LogManager.GetLogger("spawn");
 
+    private Terrain terrain;
     public int numbers;
 	
 	public GameObject[] enemies;
@@ -17,33 +17,44 @@ public class spawn : MonoBehaviour {
     public bool stop;
 
     int randEnnemy;
-
-    /*
+    
     //Au Runtime
     void Start()
     {
+        terrain = Terrain.activeTerrain;
+        StartCoroutine(WaitNavMesh());
+    }
+
+    IEnumerator WaitNavMesh ()
+    {
+        yield return new WaitUntil(() => navMeshProc.navMeshFinish == true);
+
         while (!stop)
         {
             if (numbers <= 0)
                 stop = true;
             randEnnemy = Random.Range(0, enemies.Length);
 
-            Vector3 spawnPosition = new Vector3(this.transform.position.x + Random.Range(-50, 50), this.transform.position.y + 5, this.transform.position.z + Random.Range(-10, 10));
+            int rdmx = Random.Range(-50, 50);
+            int rdmz = Random.Range(-15, -25);
+            float hauteur_terrain = terrain.SampleHeight(new Vector3(rdmx, 0, rdmz));
+            Vector3 spawnPosition = new Vector3(this.transform.position.x + rdmx, hauteur_terrain, this.transform.position.z + rdmz);
 
             Instantiate(enemies[randEnnemy], spawnPosition, this.transform.rotation, this.transform.parent);
             numbers--;
         }
+        Logger.Info("Fin Génération ennemies");
     }
 
     private void Update()
     {
 
     }
-    */
+    
 
     
     //Avec timer
-    
+    /*
     void Start()
 	{
         try
@@ -89,4 +100,5 @@ public class spawn : MonoBehaviour {
         }
         Logger.Info("Fin - Génération ennemies");
     }
+    */
 }

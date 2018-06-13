@@ -21,11 +21,17 @@ public class DiamondSquare : MonoBehaviour {
     private float posChateauY;
     private float posChateauZ;
     private float sizeChateauX;
-    private float sizeChateauY;
+    //private float sizeChateauY;
     private float sizeChateauZ;
+
+    public NavMeshSurface NavMeshSurface;
 
     public GameObject player;
     public GameObject chateau;
+
+    public int numbersEnnemies;
+    public GameObject[] objEnemies;
+    public GameObject spawnPoint;
 
     [System.Serializable]
     public class Envmt
@@ -33,6 +39,7 @@ public class DiamondSquare : MonoBehaviour {
         public float startingHeight;
         public float endingHeight;
         public int nbElement;
+        public bool groupe = false;
         public GameObject obj;
     }
 
@@ -302,9 +309,9 @@ public class DiamondSquare : MonoBehaviour {
                     Logger.Debug("Emplacement chateau en z = " + (i + (int)size_chateau_z / 2));
                     Logger.Debug("Emplacement chateau en y = " + my_terrain.SampleHeight(new Vector3((j + (int)size_chateau_x / 2), 0, (i + (int)size_chateau_z / 2))));
                     posChateauX = j + (int)size_chateau_x / 2;
-                    posChateauY = my_terrain.SampleHeight(new Vector3(j, 0, i)) - 2;
                     posChateauZ = i + (int)size_chateau_z / 2;
-                    return new Vector3(j + (int)size_chateau_x / 2, my_terrain.SampleHeight(new Vector3((j + (int)size_chateau_x / 2), 0, (i + (int)size_chateau_z / 2))) - ((sizeTerrainY * pente_max * 100 * 2) / 100), i + (int)size_chateau_z / 2);
+                    posChateauY = my_terrain.SampleHeight(new Vector3(posChateauX, 0, posChateauZ)) - ((sizeTerrainY * pente_max * 100 * 2) / 100) - 2;
+                    return new Vector3(posChateauX, posChateauY, posChateauZ);
                 }
             }
         }
@@ -331,17 +338,17 @@ public class DiamondSquare : MonoBehaviour {
             }
         }
         this.sizeChateauX = x;
-        this.sizeChateauY = y;
+        //this.sizeChateauY = y;
         this.sizeChateauZ = z;
         chateau.transform.position = get_emplacement_chateau(x, y, z);
     }
 
     bool inside_chateau(int x, int z)
     {
-        if (x >= this.posChateauX - (this.sizeChateauX) 
-            && x <= this.posChateauX + (this.sizeChateauX) 
-            && z >= this.posChateauZ - (this.sizeChateauZ) 
-            && z <= this.posChateauZ + (this.sizeChateauZ))
+        if (x >= this.posChateauX - (this.sizeChateauX/1.7) 
+            && x <= this.posChateauX + (this.sizeChateauX/1.7) 
+            && z >= this.posChateauZ - (this.sizeChateauZ/1.7) 
+            && z <= this.posChateauZ + (this.sizeChateauZ/1.7))
             return true;
         return false;
     }
@@ -395,16 +402,52 @@ public class DiamondSquare : MonoBehaviour {
                     var hauteurmin = my_terrain.terrainData.size.y * (elem.startingHeight * 100) / 100;
                     var hauteurmax = my_terrain.terrainData.size.y * (elem.endingHeight * 100) / 100;
                     var hauteurRdm = my_terrain.SampleHeight(new Vector3(rdmx, 0, rdmz));
+
                     if (hauteurRdm >= hauteurmin && hauteurRdm <= hauteurmax)
                     {
-                        Vector3 spawnPosition = new Vector3(rdmx, hauteurRdm, rdmz);
-                        Instantiate(elem.obj, spawnPosition, this.transform.rotation, this.transform.parent);
-                        elem.nbElement--;
-                        break;
+                        if (elem.groupe)
+                        {
+                            for(int i = 0; i < 20; i++)
+                            {
+                                var newrdmx = Random.Range(-5, 5);
+                                var newrdmz = Random.Range(-5, 5);
+                                hauteurRdm = my_terrain.SampleHeight(new Vector3(rdmx + newrdmx, 0, rdmz + newrdmz));
+                                Vector3 spawnPosition = new Vector3(rdmx + newrdmx, hauteurRdm /*pour la pente*/, rdmz + newrdmz);
+                                Instantiate(elem.obj, spawnPosition, this.transform.rotation, this.transform.parent);
+                            }
+                            elem.nbElement--;
+                        }
+                        else
+                        {
+                            Vector3 spawnPosition = new Vector3(rdmx, hauteurRdm - 2 /*pour la pente*/, rdmz);
+                            Instantiate(elem.obj, spawnPosition, this.transform.rotation, this.transform.parent);
+                            elem.nbElement--;
+                            break;
+                        }
                     }
                 }
             }
             busy = true;
+        }
+    }
+
+    void init_ennemies ()
+    {
+        int randEnnemy;
+        bool stop = false;
+        while (!stop)
+        {
+            if (this.numbersEnnemies <= 0)
+                stop = true;
+            randEnnemy = Random.Range(0, this.objEnemies.Length);
+
+            int rdmx = Random.Range(-30, 30);
+            int rdmz = Random.Range(-5, -10);
+            var hauteur_terrain = my_terrain.SampleHeight(new Vector3(this.spawnPoint.transform.position.x + rdmx, 0, this.spawnPoint.transform.position.z + rdmz));
+            Vector3 spawnPosition = new Vector3(this.spawnPoint.transform.position.x + rdmx, hauteur_terrain, this.spawnPoint.transform.position.z + rdmz);
+
+            Instantiate(this.objEnemies[randEnnemy], spawnPosition, new Quaternion(), this.spawnPoint.transform.parent);
+            numbersEnnemies--;
         }
     }
 
@@ -426,11 +469,14 @@ public class DiamondSquare : MonoBehaviour {
             Compheights(heighmap_width, heighmap_height);
             paintTerrain();
             Logger.Info("Fin - Génération Terrain");
+            Logger.Info("Début - Génération NavMesh");
+            NavMeshSurface.BuildNavMesh();
+            Logger.Info("Fin - Génération NavMesh");
             Logger.Info("Début - Placement des objets / environnement / player");
             init_chateau();
             init_chatacter();
-            //init_ennemies();
             init_environnement();
+            init_ennemies();
             Logger.Info("Fin - Placement des objets / environnement / player");
 
         }

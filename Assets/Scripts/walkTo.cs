@@ -31,6 +31,7 @@ public class walkTo : MonoBehaviour
                 agent.destination = transform.parent.position;
                 neverloop = false;
             }
+            
             //spécifique au skelette vérifie qu'il bouge, s'il bouge, l'animer
             /*
             if (this.transform.position == agent.destination)

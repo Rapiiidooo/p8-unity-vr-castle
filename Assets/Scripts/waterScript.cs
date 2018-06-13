@@ -27,7 +27,6 @@ public class waterScript : MonoBehaviour {
 
             var finalheigth = heigth * (splatHeigth * 100) / 100;
 
-
             //DiamondSquare.splatHeights
             water.transform.localScale = new Vector3(width, 1, lenght);
             water.transform.position = new Vector3(water.transform.position.x + width / 2, finalheigth, water.transform.position.z + lenght / 2);
